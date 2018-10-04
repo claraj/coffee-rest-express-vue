@@ -11,7 +11,7 @@ const path = require('path')
 
 // app.use(cors())
 
-const staticPath = path.join(__dirname, '..', 'client', 'dist')
+const staticPath = path.join(__dirname, 'client', 'dist')
 console.log(staticPath)
 app.use(serveStatic(staticPath))
 
