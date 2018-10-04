@@ -11,7 +11,10 @@ const path = require('path')
 
 // app.use(cors())
 
-app.use(serveStatic(path.join(__dirname, '..', 'client', 'dist') ))
+const staticPath = path.join(__dirname, '..', 'client', 'dist')
+console.log(staticPath)
+app.use(serveStatic(staticPath))
+
 
 app.use(bodyParser.json())
 app.use(methodOverride())
