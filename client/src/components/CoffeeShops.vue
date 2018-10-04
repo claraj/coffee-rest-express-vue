@@ -1,8 +1,7 @@
 <template>
-  <div class="hello">
+  <div>
 
     <h1>Coffee Shops</h1>
-
 
     <b-container fluid>
       <b-row>
@@ -28,7 +27,6 @@
 
             </li>
           </ul>
-
 
         </b-col>
       </b-row>
@@ -103,4 +101,5 @@ img {
 h1 {
   margin: 20px;
 }
+
 </style>

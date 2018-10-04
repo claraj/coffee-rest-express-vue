@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 function CoffeeShopService () {
-  this.base = 'http://127.0.0.1:3000/api/v1'
+  this.base = '/api/v1'
 
   this.$crud = axios.create({
     baseURL: this.base,
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'http://127.0.0.1:3000'
+      // 'Access-Control-Allow-Origin': 'http://127.0.0.1:3000'
     }
   })
 

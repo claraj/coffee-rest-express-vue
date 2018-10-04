@@ -7,10 +7,10 @@ const app = express()
 const router = express.Router()
 const serveStatic = require('serve-static')
 const path = require('path')
-const cors = require('cors')
+// const cors = require('cors')
 
+// app.use(cors())
 
-app.use(cors())
 app.use(serveStatic(path.join(__dirname, '..', 'client', 'dist') ))
 
 app.use(bodyParser.json())
