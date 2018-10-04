@@ -11,23 +11,10 @@
         </b-col>
 
         <b-col>
-          <h2>Coffee Shop Ratings</h2>
-          <p>Change star rating by clicking on the stars for a coffee shop</p>
-
-          <ul>
-            <li v-for="shop in coffeeShops" :key="shop._id">
-
-              {{shop.name}}, {{shop.stars}} <span v-if="shop.stars==1">star</span> <span v-else>stars</span>
-
-              <Stars
-                v-bind:stars="shop.stars"
-                v-bind:_id="shop._id"
-                @onStarsChanged="onStarsChanged">
-              </Stars>
-
-            </li>
-          </ul>
-
+          <CoffeeShopList
+            v-bind:coffeeShops="coffeeShops"
+            @onStarsChanged="onStarsChanged">
+          </CoffeeShopList>
         </b-col>
       </b-row>
 
@@ -39,12 +26,13 @@
 <script>
 
 import CoffeeShopService from '../services/coffee_shop_service'
+import CoffeeShopList from './CoffeeShopList'
 import Stars from './Stars'
 import AddCoffeeShop from './AddCoffeeShop'
 
 export default {
   name: 'CoffeeShops',
-  components: { AddCoffeeShop, Stars },
+  components: { AddCoffeeShop, CoffeeShopList, Stars },
   data () {
     return {
       msg: 'Coffee',
@@ -82,16 +70,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-ul {
-  padding: 0;
-}
-li {
-  margin: 0 10px;
-  list-style-type: none;
-}
-a {
-  color: #42b983;
-}
 
 img {
   border-radius: 10px;
