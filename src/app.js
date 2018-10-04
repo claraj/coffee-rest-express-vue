@@ -7,9 +7,6 @@ const app = express()
 const router = express.Router()
 const serveStatic = require('serve-static')
 const path = require('path')
-// const cors = require('cors')
-
-// app.use(cors())
 
 const staticPath = path.join(__dirname, '..', 'client', 'dist')
 console.log(staticPath)
