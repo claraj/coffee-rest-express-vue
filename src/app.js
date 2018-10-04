@@ -11,7 +11,7 @@ const cors = require('cors')
 
 
 app.use(cors())
-app.use(serveStatic(path.join(__dirname, '..', '..', 'client', 'dist') ))
+app.use(serveStatic(path.join(__dirname, '..', 'client', 'dist') ))
 
 app.use(bodyParser.json())
 app.use(methodOverride())
