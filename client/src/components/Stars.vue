@@ -5,12 +5,18 @@ const starChar = '★'
 export default {
   name: 'Stars',
   props: {
-    stars: Number,
+    stars: Number, // initial number of stars
     _id: String
   },
   data () {
     return {
-      starsUpdate: 0
+      starsUpdate: 0 // cos we should not modify a prop
+    }
+  },
+  watch: {
+    stars: function () {
+      console.log('hey stars changed')
+      this.starsUpdate = this.stars
     }
   },
   created () {
@@ -50,7 +56,7 @@ export default {
     },
 
     hoverHandler (ev) {
-      console.log('hovering!') // todo maybe indicate rating to be given if user were to click now?
+      // todo maybe indicate rating to be given if user were to click now?
     },
 
     onStarsChanged (id, newStars) {

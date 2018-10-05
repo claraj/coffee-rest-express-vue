@@ -6,13 +6,17 @@
     <b-container fluid>
       <b-row>
         <b-col>
-          <AddCoffeeShop @onAddNew="onAddNew"></AddCoffeeShop>
+          <AddCoffeeShop
+            v-bind:errors="errors"
+            @onAddNew="onAddNew">
+          </AddCoffeeShop>
           <img src="../assets/coffee.jpg">
         </b-col>
 
         <b-col>
           <CoffeeShopList
             v-bind:coffeeShops="coffeeShops"
+            v-bind:errors="errors"
             @onStarsChanged="onStarsChanged">
           </CoffeeShopList>
         </b-col>
@@ -27,16 +31,15 @@
 
 import CoffeeShopService from '../services/coffee_shop_service'
 import CoffeeShopList from './CoffeeShopList'
-import Stars from './Stars'
 import AddCoffeeShop from './AddCoffeeShop'
 
 export default {
   name: 'CoffeeShops',
-  components: { AddCoffeeShop, CoffeeShopList, Stars },
+  components: { AddCoffeeShop, CoffeeShopList },
   data () {
     return {
-      msg: 'Coffee',
-      coffeeShops: []
+      coffeeShops: [],
+      errors: {}
     }
   },
   mounted () {
@@ -44,24 +47,42 @@ export default {
   },
   methods: {
     fetchShops () {
-      console.log(CoffeeShopService.base)
-      CoffeeShopService.fetchAll().then(data => {
-        this.coffeeShops = data
-        this.coffeeShops.forEach(shop => {
-          if (!shop.stars) { shop.stars = 0 }
+      CoffeeShopService.fetchAll()
+        .then(data => {
+          this.coffeeShops = data
+          this.coffeeShops.forEach(shop => {
+            if (!shop.stars) { shop.stars = 0 }
+            this.errors.fetchAll = ''
+          })
         })
-      })
+        .catch(err => {
+          this.errors.fetchAll = 'Error fetching coffee shops'
+          console.log('Error fetching coffee shops', err)
+        })
     },
 
     onStarsChanged (id, stars) {
-      console.log(`todo update ${stars} for ${id}`)
-      CoffeeShopService.updateStars(id, stars).then(data => {
+      CoffeeShopService.updateStars(id, stars)
+      .then(data => {
+        this.errors.changeStars = ''
         this.fetchShops()
+      })
+      .catch(err => {
+        this.errors.changeStars = 'Error changing stars'
+        console.log(`Error changing stars to ${stars} for id ${id}`, err)
       })
     },
 
-    onAddNew () {
-      this.fetchShops()
+    onAddNew (data) {
+      CoffeeShopService.addNew(data)
+      .then(data => {
+        this.errors.add = ''
+        this.fetchShops()
+      })
+      .catch(err => {
+        this.errors.add = 'Error adding new coffee shop'
+        console.log(`Error adding new shop with data ${JSON.stringify(data)}`, err)
+      })
     }
   }
 }

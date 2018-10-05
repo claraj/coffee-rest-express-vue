@@ -32,6 +32,16 @@ describe('Stars.vue', () => {
     expect(starsOnIds).to.eql(['star-1', 'star-2', 'star-3'])
   })
 
+  it('should change the number of stars on when the stars prop is changed', () => {
+    const Constructor = Vue.extend(Stars)
+    const vm = new Constructor({propsData: {stars: 3}}).$mount()
+    vm.stars = 2
+    const starsOn = Array.from(vm.$el.querySelectorAll('.star-on'))
+    // stars-on should have ids star-1, star-2, star-3
+    const starsOnIds = starsOn.map(el => el.id).sort()
+    expect(starsOnIds).to.eql(['star-1', 'star-2'])
+  })
+
   it('should change the number of stars on when stars are clicked', () => {
     const wrapper = mount(Stars, {
       propsData: {
