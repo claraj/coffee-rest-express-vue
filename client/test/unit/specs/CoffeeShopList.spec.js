@@ -11,13 +11,16 @@ import CoffeeShopList from '@/components/CoffeeShopList'
 import sinon from 'sinon'
 
 describe('CoffeeShopList. vue', () => {
+
   it('should display a list of coffee shops', () => {
     const exampleShops = [
       {_id: '1', name: 'Java Beans', stars: 3},
       {_id: '2', name: 'Cakes and Coffee', stars: 5},
     ]
     const Constructor = Vue.extend(CoffeeShopList)
-    const vm = new Constructor({propsData: {coffeeShops: exampleShops}}).$mount()
+    const vm = new Constructor({propsData: {coffeeShops: exampleShops, errors: {fetchAll: '', changeStars:''}}}).$mount()
+
+    console.log('list elements', vm.$el.querySelectorAll('li'))
 
     const shopListElements = Array.from(vm.$el.querySelectorAll('li'))
 
@@ -27,6 +30,17 @@ describe('CoffeeShopList. vue', () => {
       expect(shopListElements[i].textContent).to.include(exampleShops[i].name)
       expect(shopListElements[i].textContent).to.include(exampleShops[i].stars)
     }
+  })
+
+  it('should display a No Shops message if the list of shops is empty', () => {
+    const exampleShops = []
+    const Constructor = Vue.extend(CoffeeShopList)
+    const vm = new Constructor({propsData: {coffeeShops: exampleShops, errors: {fetchAll: '', changeStars:''}}}).$mount()
+
+    const shopListElements = Array.from(vm.$el.querySelectorAll('li'))
+    expect(shopListElements.length).to.be.equal(0)
+    const noShopMessage = vm.$el.querySelector('#no-shops')
+    expect(noShopMessage.textContent).to.include('No Coffee Shops')
   })
 
   it('should emit an event when a star rating is changed', () => {
@@ -39,7 +53,8 @@ describe('CoffeeShopList. vue', () => {
 
     const wrapper = mount(CoffeeShopList, {
       propsData: {
-        coffeeShops: exampleShops
+        coffeeShops: exampleShops,
+        errors: {fetchAll: '', changeStars: ''}
       },
       methods: {
         onStarsChanged: spyUpddateStars

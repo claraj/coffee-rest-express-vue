@@ -53,7 +53,7 @@ describe('Stars.vue', () => {
     // let starsElIds = [...Array(5).keys()].map(i => 'star-' + (i+1))
     let starsElIds = ['star-1', 'star-2', 'star-3', 'star-4', 'star-5']
 
-    function clickOnStar(starNum) {
+    function clickOnStar (starNum) {
       wrapper.find(`#star-${starNum}`).trigger('click')
       const starsOn = Array.from(wrapper.vm.$el.querySelectorAll('.star-on'))
       const starsOnIds = starsOn.map(el => el.id).sort()

@@ -3,8 +3,7 @@
 
     <h2>Coffee Shop Ratings</h2>
 
-
-    <div v-if="!coffeeShops.length">No Coffee Shops. Try adding some!</div>
+    <div id='no-shops' v-if="!coffeeShops.length">No Coffee Shops. Try adding some!</div>
 
     <div v-else>
       <p>Change star rating by clicking on the stars for a coffee shop</p>

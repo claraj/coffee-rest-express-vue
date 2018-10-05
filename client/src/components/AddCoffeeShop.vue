@@ -5,9 +5,9 @@
     <b-form>
       <b-form-input label="Name" v-model="name" placeholder="Name" id="new-name"/>
       <span>How many stars?</span><Stars v-bind:stars="stars" @onStarsChanged="onStarsChanged"></Stars>
-      <p v-if="errors">{{errors.addErrors}}</p>
-      <p v-if="formErrors">{{formErrors}}</p>
-      <b-button v-on:click="addNewCoffeeShop">Add</b-button>
+      <p id="add-errors" v-if="errors">{{errors.addErrors}}</p>
+      <p id="form-errors" v-if="formErrors">{{formErrors}}</p>
+      <b-button id="add-new-button" v-on:click="addNewCoffeeShop">Add</b-button>
     </b-form>
   </div>
 </template>
