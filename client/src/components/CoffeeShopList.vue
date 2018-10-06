@@ -3,6 +3,9 @@
 
     <h2>Coffee Shop Ratings</h2>
 
+    <div id='errors-fetch' v-if="errors.fetchAll">{{errors.fetchAll}}</div>
+    <div id='errors-change-stars' v-if="errors.changeStars">{{errors.changeStars}}</div>
+
     <div id='no-shops' v-if="!coffeeShops.length">No Coffee Shops. Try adding some!</div>
 
     <div v-else>
@@ -25,9 +28,6 @@
         </li>
       </ul>
     </div>
-
-
-
   </div>
 </template>
 

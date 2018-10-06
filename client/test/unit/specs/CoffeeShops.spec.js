@@ -8,107 +8,131 @@ TODO does this contain a AddCoffeeShop and a CoffeeShopList ?
 
 */
 
-import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import CoffeeShops from '@/components/CoffeeShops'
 import CoffeeShopList from '@/components/CoffeeShopList'
 import AddCoffeeShop from '@/components/AddCoffeeShop'
 import sinon from 'sinon'
-import chai from 'chai'
 import CoffeeShopService from '@/services/coffee_shop_service'
 
+import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import Promise from 'promise-polyfill';
+Vue.use(BootstrapVue)
 
-const stubAddNew = sinon.stub(CoffeeShopService, 'addNew')
-const stubFetchAll = sinon.stub(CoffeeShopService, 'fetchAll')
-const stubChangeStars = sinon.stub(CoffeeShopService, 'updateStars')
+// import Promise from 'promise-polyfill';
 
-// stubFetchAll.resolves(exampleShops)   // returns a promise that resolves to exampleShops
+let stubAddNew
+let stubFetchAll
+let stubChangeStars
 
 describe('CoffeeShop', () => {
+  beforeEach('create stubs', () => {
+    stubAddNew = sinon.stub(CoffeeShopService, 'addNew')
+    stubFetchAll = sinon.stub(CoffeeShopService, 'fetchAll')
+    stubChangeStars = sinon.stub(CoffeeShopService, 'updateStars')
+  })
 
-  beforeEach('reset stubs', () => {
-    stubAddNew.reset()
-    stubFetchAll.reset()
-    stubChangeStars.reset()
+  afterEach('restore stubs', () => {
+    stubAddNew.restore()
+    stubFetchAll.restore()
+    stubChangeStars.restore()
   })
 
   it('should contain a list component and an add form component', () => {
     stubFetchAll.resolves([])
     const wrapper = mount(CoffeeShops)
-    expect(wrapper.contains(CoffeeShopList)).to.be.true
-    expect(wrapper.contains(AddCoffeeShop)).to.be.true
+
+    // Have to wait until the next tick to check the assertions so the Promise can resolve
+    return Vue.nextTick().then(() => {
+      expect(wrapper.contains(CoffeeShopList)).to.be.true
+      expect(wrapper.contains(AddCoffeeShop)).to.be.true
+    })
   })
 
   it('should fetch a list of coffee shops when launched', () => {
-
     const exampleShops = [
       {_id: '1', name: 'Launch Java Beans', stars: 3},
-      {_id: '2', name: 'Launch Cakes and Coffee', stars: 5},
+      {_id: '2', name: 'Launch Cakes and Coffee', stars: 5}
     ]
 
-    stubFetchAll.resolves(exampleShops)   // returns a promise that resolves to exampleShops
+    stubFetchAll.resolves(exampleShops) // returns a promise that resolves to exampleShops
     const wrapper = mount(CoffeeShops)
-    console.log('fetching things', wrapper.vm.coffeeShops)
-    expect(wrapper.vm.coffeeShops).to.be.equal(exampleShops)
+
+    return Vue.nextTick().then(() => {
+      // Data is set, and rendered in the Component
+      expect(wrapper.vm.coffeeShops).to.be.equal(exampleShops)
+      expect(wrapper.text()).to.include('Launch Java Beans')
+      expect(wrapper.text()).to.include('3 stars')
+      expect(wrapper.text()).to.include('Launch Cakes and Coffee')
+      expect(wrapper.text()).to.include('5 stars')
+    })
   })
 
-  it('should set an error flag if not possible to fetch coffee shop list', () => {
-
-    stubFetchAll.rejects('error')
+  it('should show an error message if not possible to fetch coffee shop list', () => {
+    stubFetchAll.rejects('oh dear')
     const wrapper = mount(CoffeeShops)
-    expect(wrapper.vm.coffeeShops).to.be.eql([])
-    expect(wrapper.vm.errors.fetchAll).to.include('Error fetching coffee shops')
 
+    // wait two ticks (why?)
+    return Vue.nextTick().then(() => {
+      return Vue.nextTick().then(() => {
+        expect(wrapper.find('#errors-fetch').text()).to.include('Error fetching coffee shops')
+      })
+    })
   })
 
   it('should request a new coffee shop created when addNew message received and update list of shops', () => {
 
+    // TODO this test doesn't make sense.
     let newShop = {name: 'java beans', stars: 3}
 
-    stubFetchAll.resolves( [newShop] )
     stubAddNew.resolves('whatever')
+    stubFetchAll.resolves([])
 
     const wrapper = mount(CoffeeShops)
-    wrapper.vm.onAddNew(newShop)
 
-    // was add new called?
-    stubAddNew.should.have.been.calledWith(newShop)
-
-    // was fetch all called?
-    expect(stubFetchAll.called).to.be.true
-
-    // Is the coffee shop list correct?
-    expect(wrapper.vm.coffeeShops).to.be.eql( [newShop] )
-
+    return Vue.nextTick().then(() => {
+      stubFetchAll.resolves([newShop]) //prepare to return new data
+      wrapper.vm.onAddNew(newShop)
+      return Vue.nextTick().then(() => {
+        stubAddNew.should.have.been.calledWith(newShop)
+        expect(wrapper.text()).to.include('java beans')
+        expect(wrapper.text()).to.include('3 stars')
+      })
+    })
   })
 
-  it('should set an error flag if not possible to add new coffee shop', () => {
+  it('should show an error message if not possible to add new coffee shop', () => {
+    let badNewShop = {stars: 3} // no name, not that it matters, because the promise is going to reject
 
-    let badNewShop = {stars: 3}  // no name
-
-    stubFetchAll.resolves( [] )
+    // TODO these stubs don't seem to be working, seeing API calls 404ing.
+    stubFetchAll.resolves([])
     stubAddNew.rejects('nope')
 
     const wrapper = mount(CoffeeShops)
-    wrapper.vm.onAddNew(badNewShop)
 
-    expect(wrapper.vm.coffeeShops).to.be.eql( [] )   // Array empty
-    expect(wrapper.vm.errors.addNew).to.be.equal('Error adding new coffee shop')
-
+    return Vue.nextTick().then(() => { // wait for stubFetchAll to resolve after mounting
+      wrapper.vm.onAddNew(badNewShop) // add new message
+      return Vue.nextTick().then(() => { // wait for addNew to resolve
+        return Vue.nextTick().then(() => { // wait for addNew to resolve
+          console.log(wrapper.text())
+        expect(wrapper.find('#add-errors').text()).to.include('Error adding new coffee shop')
+      })
+    })
+    })
   })
 
-  it('should request the number of stars are changed onStarsChanged message received and update list of shops', () => {
-
+  it('should request the number of stars are changed when onStarsChanged message received and update list of shops', () => {
     const exampleShops = [
       {_id: '1', name: 'Change Stars Java Beans', stars: 3},
-      {_id: '2', name: 'Change Stars Cakes and Coffee', stars: 5},
+      {_id: '2', name: 'Change Stars Cakes and Coffee', stars: 5}
     ]
 
     const exampleShopsUpdated = [
       {_id: '1', name: 'Change Stars Java Beans', stars: 3},
-      {_id: '2', name: 'Change Stars Cakes and Coffee', stars: 1},
+      {_id: '2', name: 'Change Stars Cakes and Coffee', stars: 1}
     ]
 
     stubFetchAll.resolves(exampleShops)
@@ -116,27 +140,33 @@ describe('CoffeeShop', () => {
 
     const wrapper = mount(CoffeeShops)
 
-    stubFetchAll.resolves(exampleShopsUpdated)
-    wrapper.vm.onStarsChanged({_id: 2, stars: 1})
-
-    expect(wrapper.vm.coffeeShops).to.be.equal(exampleShopsUpdated)
-
+    return Vue.nextTick().then(() => {
+      return Vue.nextTick().then(() => {
+        stubFetchAll.resolves(exampleShopsUpdated) // prepare to return updated data
+        wrapper.vm.onStarsChanged('2', 1) // send message to component
+        return Vue.nextTick().then(() => {
+          expect(wrapper.find('#shop-2').text()).to.include('1 star')
+        })
+      })
+    })
   })
 
-  it('should set an error flag if not possible to update coffee shop stars', () => {
-
+  it('should show an error message if not possible to update coffee shop stars', () => {
     const exampleShops = [
       {_id: '1', name: 'Error Stars Java Beans', stars: 3},
-      {_id: '2', name: 'Error Stars Cakes and Coffee', stars: 5},
+      {_id: '2', name: 'Error Stars Cakes and Coffee', stars: 5}
     ]
 
     stubFetchAll.resolves(exampleShops)
     stubChangeStars.rejects('oops')
 
     const wrapper = mount(CoffeeShops)
-    wrapper.vm.onStarsChanged('2', 3)  // whatever
-    expect(wrapper.vm.errors.changeStars).to.be.equal('Error changing stars')
 
+    return Vue.nextTick().then(() => {
+      wrapper.vm.onStarsChanged('2', 3) // whatever
+      return Vue.nextTick().then(() => {
+        expect(wrapper.text()).to.include('Error changing stars')
+      })
+    })
   })
-
 })

@@ -34,8 +34,11 @@ describe('Stars.vue', () => {
 
   it('should change the number of stars on when the stars prop is changed', () => {
     const Constructor = Vue.extend(Stars)
+    // launch with 3 stars
     const vm = new Constructor({propsData: {stars: 3}}).$mount()
-    vm.stars = 2
+    // change to two stars
+    vm.$props.stars = 2
+    console.log(vm.$props)
     const starsOn = Array.from(vm.$el.querySelectorAll('.star-on'))
     // stars-on should have ids star-1, star-2, star-3
     const starsOnIds = starsOn.map(el => el.id).sort()

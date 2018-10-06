@@ -13,7 +13,7 @@ function CoffeeShopService () {
 
   CoffeeShopService.prototype.fetchAll = () => {
     return this.$crud.get(`/coffeeshop/`, {params: {sort: 'name'}})
-      .then(response => response.data)
+      .then(response => response.data )
   }
 
   CoffeeShopService.prototype.updateStars = (id, stars) => {

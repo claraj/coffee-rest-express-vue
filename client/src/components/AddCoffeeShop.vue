@@ -5,7 +5,7 @@
     <b-form>
       <b-form-input label="Name" v-model="name" placeholder="Name" id="new-name"/>
       <span>How many stars?</span><Stars v-bind:stars="stars" @onStarsChanged="onStarsChanged"></Stars>
-      <p id="add-errors" v-if="errors">{{errors.addErrors}}</p>
+      <p id="add-errors" v-if="errors.addNew">{{errors.addNew}}</p>
       <p id="form-errors" v-if="formErrors">{{formErrors}}</p>
       <b-button id="add-new-button" v-on:click="addNewCoffeeShop">Add</b-button>
     </b-form>
@@ -27,7 +27,7 @@ export default {
     return {
       name: '',
       stars: 0,
-      formErrors: '',
+      formErrors: ''
     }
   },
   methods: {
@@ -42,7 +42,7 @@ export default {
       }
       this.$emit('onAddNew', {name: this.name, stars: this.stars})
       this.name = ''
-      this.errors = ''
+      // this.errors = ''
       this.stars = 0
     }
   }

@@ -11,22 +11,25 @@ import CoffeeShopList from '@/components/CoffeeShopList'
 import sinon from 'sinon'
 
 describe('CoffeeShopList. vue', () => {
-
   it('should display a list of coffee shops', () => {
     const exampleShops = [
       {_id: '1', name: 'Java Beans', stars: 3},
-      {_id: '2', name: 'Cakes and Coffee', stars: 5},
+      {_id: '2', name: 'Cakes and Coffee', stars: 5}
     ]
     const Constructor = Vue.extend(CoffeeShopList)
-    const vm = new Constructor({propsData: {coffeeShops: exampleShops, errors: {fetchAll: '', changeStars:''}}}).$mount()
-
-    console.log('list elements', vm.$el.querySelectorAll('li'))
+    const vm = new Constructor({
+      propsData: {
+        coffeeShops: exampleShops,
+        errors: {
+          fetchAll: '',
+          changeStars: ''
+        }
+      }
+    }).$mount()
 
     const shopListElements = Array.from(vm.$el.querySelectorAll('li'))
 
-    // console.log('shop els', shopListElements)
-
-    for (let i = 0 ; i < exampleShops.length ; i++) {
+    for (let i = 0; i < exampleShops.length; i++) {
       expect(shopListElements[i].textContent).to.include(exampleShops[i].name)
       expect(shopListElements[i].textContent).to.include(exampleShops[i].stars)
     }
@@ -35,7 +38,15 @@ describe('CoffeeShopList. vue', () => {
   it('should display a No Shops message if the list of shops is empty', () => {
     const exampleShops = []
     const Constructor = Vue.extend(CoffeeShopList)
-    const vm = new Constructor({propsData: {coffeeShops: exampleShops, errors: {fetchAll: '', changeStars:''}}}).$mount()
+    const vm = new Constructor({
+      propsData: {
+        coffeeShops: exampleShops,
+        errors: {
+          fetchAll: '',
+          changeStars: ''
+        }
+      }
+    }).$mount()
 
     const shopListElements = Array.from(vm.$el.querySelectorAll('li'))
     expect(shopListElements.length).to.be.equal(0)
@@ -46,7 +57,7 @@ describe('CoffeeShopList. vue', () => {
   it('should emit an event when a star rating is changed', () => {
     const exampleShops = [
       {_id: '1', name: 'Java Beans', stars: 3},
-      {_id: '2', name: 'Cakes and Coffee', stars: 5},
+      {_id: '2', name: 'Cakes and Coffee', stars: 5}
     ]
 
     const spyUpddateStars = sinon.spy()
@@ -75,6 +86,5 @@ describe('CoffeeShopList. vue', () => {
     let star5 = cakesCoffeeEl.find('#star-5')
     star5.trigger('click')
     spyUpddateStars.should.have.been.calledWith('2', 5)
-
   })
 })

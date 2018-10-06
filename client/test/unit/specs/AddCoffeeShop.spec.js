@@ -1,12 +1,15 @@
-import Vue from 'vue'
 import { mount } from '@vue/test-utils'
 import AddCoffeeShop from '@/components/AddCoffeeShop'
-import sinon from 'sinon'
 
 describe('Add Coffee Shop form', () => {
-
   it('should display an error message and not emit anything if no name provided in the form', () => {
-    const wrapper = mount(AddCoffeeShop)
+    const wrapper = mount(AddCoffeeShop, {
+      propsData: {
+        errors: {
+          addNew: ''
+        }
+      }
+    })
     wrapper.setData({ name: '' })
     wrapper.find('#add-new-button').trigger('click')
     let formErrors = wrapper.find('#form-errors')
@@ -16,7 +19,13 @@ describe('Add Coffee Shop form', () => {
   })
 
   it('should emit an event with new coffee shop info if form is complete and submitted', () => {
-    const wrapper = mount(AddCoffeeShop)
+    const wrapper = mount(AddCoffeeShop, {
+      propsData: {
+        errors: {
+          addNew: ''
+        }
+      }
+    })
     const data = {name: 'Example Shop', stars: 3}
     wrapper.vm.name = 'Example Shop'
     wrapper.vm.stars = 3
@@ -28,9 +37,14 @@ describe('Add Coffee Shop form', () => {
   })
 
   it('should display an error message if error prop is set', () => {
-    const wrapper = mount(AddCoffeeShop)
-    wrapper.setProps( {errors: {addErrors: 'oops'}} )
+    const wrapper = mount(AddCoffeeShop, {
+      propsData: {
+        errors: {
+          addNew: ''
+        }
+      }
+    })
+    wrapper.setProps({errors: {addNew: 'oops'}})
     expect(wrapper.find('#add-errors').text()).to.be.equal('oops')
   })
-
 })

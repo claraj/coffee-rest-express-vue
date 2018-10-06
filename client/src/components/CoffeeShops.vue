@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       coffeeShops: [],
-      errors: {}
+      errors: {fetchAll: '', changeStars: '', addNew: ''}
     }
   },
   mounted () {
@@ -65,28 +65,28 @@ export default {
 
     onStarsChanged (id, stars) {
       CoffeeShopService.updateStars(id, stars)
-      .then(data => {
-        console.log(`updated stars for ${id} to ${stars}`, data)
-        this.errors.changeStars = ''
-        this.fetchShops()
-      })
-      .catch(err => {
-        this.errors.changeStars = 'Error changing stars'
-        console.log(`Error changing stars to ${stars} for id ${id} `, err, this.errors)
-      })
+        .then(data => {
+          console.log(`updated stars for ${id} to ${stars}`, data)
+          this.errors.changeStars = ''
+          this.fetchShops()
+        })
+        .catch(err => {
+          this.errors.changeStars = 'Error changing stars'
+          console.log(`Error changing stars to ${stars} for id ${id} `, err, this.errors)
+        })
     },
 
     onAddNew (data) {
       CoffeeShopService.addNew(data)
-      .then(data => {
-        console.log(`added new.`, data)
-        this.errors.add = ''
-        this.fetchShops()
-      })
-      .catch(err => {
-        this.errors.add = 'Error adding new coffee shop'
-        console.log(`Error adding new shop with data ${JSON.stringify(data)} `, err, this.errors)
-      })
+        .then(data => {
+          console.log(`added new.`, data)
+          this.errors.addNew = ''
+          this.fetchShops()
+        })
+        .catch(err => {
+          this.errors.addNew = 'Error adding new coffee shop'
+          console.log(`Error adding new shop with data ${JSON.stringify(data)} `, err, this.errors)
+        })
     }
   }
 }
