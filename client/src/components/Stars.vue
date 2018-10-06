@@ -1,66 +1,36 @@
-<script>
+<template>
+  <div v-bind:id="'star-'+_id">
+    <input class="star-range-slider" v-model="starsSet" v-on:input="onStarsChanged" type="range" min="1" max="5"/>
+    <span class="star-text-display">
+      <span class="star-value">{{stars}}</span>
+      <span v-if="stars==1">star</span>
+      <span v-else>stars</span>
+    </span>
+  </div>
+</template>
 
-const starChar = '★'
+<script>
 
 export default {
   name: 'Stars',
   props: {
-    stars: Number, // initial number of stars
-    _id: String
+    stars: Number, // initial number of stars, set by parent
+    _id: String // _id of thing that has this number of stars
   },
-  data () {
+  data() {
     return {
-      starsUpdate: 0 // cos we should not modify a prop
+      starsSet: this.stars // This component's local copy, used to set value of range slider.
     }
   },
   watch: {
     stars: function () {
       console.log('hey stars changed')
-      this.starsUpdate = this.stars
+      this.starsSet = this.stars
     }
   },
-  created () {
-    this.starsUpdate = this.stars
-  },
-  render: function (createElement) {
-    let count = 1
-    return createElement(
-      'div',
-      Array.apply(null, {length: 5}).map(() => {
-        let el = createElement(
-          'span',
-          {
-            attrs: {
-              class: 'star-span',
-              id: `star-${count++}`
-            },
-            on: {
-              click: this.clickHandler,
-              mouseover: this.hoverHandler
-            }
-          },
-          starChar)
-
-        if (count < this.starsUpdate + 2) {
-          el.data.attrs.class = 'star-span star-on'
-        }
-        return el
-      })
-    )
-  },
   methods: {
-    clickHandler (ev) {
-      let numStars = Number(ev.srcElement.id.slice(5)) // remove 'stars-'
-      this.starsUpdate = numStars
-      this.onStarsChanged(this._id, numStars)
-    },
-
-    hoverHandler (ev) {
-      // todo maybe indicate rating to be given if user were to click now?
-    },
-
-    onStarsChanged (id, newStars) {
-      this.$emit('onStarsChanged', id, newStars)
+    onStarsChanged () {
+      this.$emit('onStarsChanged', this._id, Number(this.starsSet))
     }
   }
 }
@@ -68,22 +38,7 @@ export default {
 </script>
 
 <style scoped>
-
 div {
   margin: 10px;
 }
-
-.star-span {
-  font-size: 20;
-  color: gray;
-  padding: 4px;
-  border-radius: 3px;
-  margin: 3px;
-}
-
-.star-on {
-  color: orange;
-  background-color: lightgray;
-}
-
 </style>
