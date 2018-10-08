@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       name: '',
-      stars: 0,
+      stars: 1,
       formErrors: ''
     }
   },
@@ -44,7 +44,7 @@ export default {
       }
       this.$emit('onAddNew', {name: this.name, stars: this.stars})
       this.name = ''
-      this.stars = 0
+      this.stars = 1
     }
   }
 }

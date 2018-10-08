@@ -14,7 +14,7 @@
       <p class="error" v-if="errors.fetchAll">{{errors.fetchAll}}</p>
       <p class="error" v-if="errors.changeStars">{{errors.changeStars}}</p>
 
-      <ul>
+      <ul id='coffee-shop-list'>
         <li v-for="shop in coffeeShops" :key="shop._id" v-bind:id="`shop-${shop._id}`">
 
           {{shop.name}}, {{shop.stars}} <span v-if="shop.stars==1">star</span> <span v-else>stars</span>
