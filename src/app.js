@@ -7,16 +7,18 @@ const app = express()
 const router = express.Router()
 const serveStatic = require('serve-static')
 const path = require('path')
+const dbConfig = require('./db_config')
 
+console.log(dbConfig)
 const staticPath = path.join(__dirname, '..', 'client', 'dist')
+
 console.log(staticPath)
 app.use(serveStatic(staticPath))
-
 
 app.use(bodyParser.json())
 app.use(methodOverride())
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(dbConfig)
 
 const coffeeShop = require('./models/coffeeShop')
 
