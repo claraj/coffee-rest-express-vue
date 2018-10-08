@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 
 describe('Stars.vue', () => {
   it('should render a range slider with min = 1 and max = 5', () => {
-    const wrapper = mount(Stars, { propsData: {stars: 4, _id: '2'} })
+    const wrapper = mount(Stars, {propsData: {stars: 4, _id: '2'}})
     const slider = wrapper.find('.star-range-slider')
     expect(slider.attributes('min')).to.be.equal('1')
     expect(slider.attributes('max')).to.be.equal('5')
@@ -11,13 +11,13 @@ describe('Stars.vue', () => {
   })
 
   it('should render the text "3 stars" if the value is 3', () => {
-    const wrapper = mount(Stars, {propsData: {stars: 3, _id: '2'} })
+    const wrapper = mount(Stars, {propsData: {stars: 3, _id: '2'}})
     const starText = wrapper.find('.star-text-display')
     expect(starText.text()).to.be.equal('3 stars')
   })
 
   it('should render the text "1 star" if the value is 1', () => {
-    const wrapper = mount(Stars, {propsData: {stars: 1, _id: '2'} })
+    const wrapper = mount(Stars, {propsData: {stars: 1, _id: '2'}})
     const starText = wrapper.find('.star-text-display')
     expect(starText.text()).to.be.equal('1 star')
   })

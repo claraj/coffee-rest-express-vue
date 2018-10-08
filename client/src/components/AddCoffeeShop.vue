@@ -4,6 +4,7 @@
     <h2>Add new Coffee Shop</h2>
     <b-form>
       <b-form-input label="Name" v-model="name" placeholder="Name" id="new-name"/>
+
       <span>How many stars?</span>
       <Stars v-bind:stars="stars" @onStarsChanged="onStarsChanged"></Stars>
 

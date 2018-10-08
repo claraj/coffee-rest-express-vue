@@ -22,8 +22,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue)
 
-// import Promise from 'promise-polyfill';
-
 let stubAddNew
 let stubFetchAll
 let stubChangeStars
@@ -85,7 +83,6 @@ describe('CoffeeShop', () => {
 
   it('should request a new coffee shop created when addNew message received and update list of shops', () => {
 
-    // TODO this test doesn't make sense.
     let newShop = {name: 'java beans', stars: 3}
 
     stubAddNew.resolves('whatever')
@@ -98,6 +95,7 @@ describe('CoffeeShop', () => {
       wrapper.vm.onAddNew(newShop)
       return Vue.nextTick().then(() => {
         stubAddNew.should.have.been.calledWith(newShop)
+        expect(wrapper.vm.coffeeShops).to.be.eql([newShop])
         expect(wrapper.text()).to.include('java beans')
         expect(wrapper.text()).to.include('3 stars')
       })
@@ -107,7 +105,6 @@ describe('CoffeeShop', () => {
   it('should show an error message if not possible to add new coffee shop', () => {
     let badNewShop = {stars: 3} // no name, not that it matters, because the promise is going to reject
 
-    // TODO these stubs don't seem to be working, seeing API calls 404ing.
     stubFetchAll.resolves([])
     stubAddNew.rejects('nope')
 
