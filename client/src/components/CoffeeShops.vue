@@ -84,7 +84,7 @@ export default {
           this.fetchShops()
         })
         .catch(err => {
-          this.errors.addNew = 'Error adding new coffee shop'
+          this.errors.addNew = err.message
           console.log(`Error adding new shop with data ${JSON.stringify(data)} `, err, this.errors)
         })
     }

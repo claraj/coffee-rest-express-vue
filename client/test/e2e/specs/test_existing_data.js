@@ -87,5 +87,15 @@ module.exports = {
       .end()
   },
 
+  'can\'t add a new coffee shop with the same name as an existing coffee shop': function(browser) {
+    browser
+      .url(browser.globals.devServerURL)
+      .waitForElementVisible('#app', 5000)
+      .setValue('#new-name', 'Pies')
+      .waitForElementVisible('#add-errors')
+      .assert.containsText('Error, expected `name` to be unique')
+      .assert.elementCount('li', 3) // still 3 coffee shops, no new one 
+      .end()
+  }
 
 }

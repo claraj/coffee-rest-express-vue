@@ -23,6 +23,10 @@ function CoffeeShopService () {
   CoffeeShopService.prototype.addNew = (data) => {
     return this.$crud.post(`/coffeeshop`, data)
       .then(response => response.data)
+      .catch(err => {
+        console.log(err.request)
+        throw err.response.data
+      })
   }
 }
 

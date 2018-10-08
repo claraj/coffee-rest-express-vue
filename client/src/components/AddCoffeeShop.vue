@@ -45,6 +45,7 @@ export default {
       this.$emit('onAddNew', {name: this.name, stars: this.stars})
       this.name = ''
       this.stars = 1
+      this.formErrors = ''
     }
   }
 }
