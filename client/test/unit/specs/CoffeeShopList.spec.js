@@ -72,19 +72,32 @@ describe('CoffeeShopList. vue', () => {
       }
     })
 
-    const javaBeansEl = wrapper.find('#shop-1')
-    let star4 = javaBeansEl.find('#star-4')
-    star4.trigger('click')
+    console.log('shop 1 is here:', wrapper.find('#shop-1').html())
+    console.log(wrapper.find('#shop-1 .star-range-slider').text())
+
+
+    const javaBeansSlider = wrapper.find('#shop-1 .star-range-slider')
+    javaBeansSlider.setValue(4)
+    javaBeansSlider.trigger('input')
     spyUpddateStars.should.have.been.calledWith('1', 4)
 
     // Click on another star rating
-    const cakesCoffeeEl = wrapper.find('#shop-2')
-    let star1 = cakesCoffeeEl.find('#star-1')
-    star1.trigger('click')
+    const cakesCoffeeSlider = wrapper.find('#shop-2 .star-range-slider')
+    cakesCoffeeSlider.setValue(3)
+    cakesCoffeeSlider.trigger('input')
+    spyUpddateStars.should.have.been.calledWith('2', 3)
+
+    cakesCoffeeSlider.setValue(4)
+    cakesCoffeeSlider.trigger('input')
+    spyUpddateStars.should.have.been.calledWith('2', 4)
+
+    cakesCoffeeSlider.setValue(5)
+    cakesCoffeeSlider.trigger('input')
+    spyUpddateStars.should.have.been.calledWith('2', 5)
+
+    cakesCoffeeSlider.setValue(1)
+    cakesCoffeeSlider.trigger('input')
     spyUpddateStars.should.have.been.calledWith('2', 1)
 
-    let star5 = cakesCoffeeEl.find('#star-5')
-    star5.trigger('click')
-    spyUpddateStars.should.have.been.calledWith('2', 5)
   })
 })
