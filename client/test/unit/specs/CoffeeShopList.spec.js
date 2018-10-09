@@ -72,9 +72,8 @@ describe('CoffeeShopList. vue', () => {
       }
     })
 
-    console.log('shop 1 is here:', wrapper.find('#shop-1').html())
-    console.log(wrapper.find('#shop-1 .star-range-slider').text())
-
+    // console.log('shop 1 is here:', wrapper.find('#shop-1').html())
+    // console.log(wrapper.find('#shop-1 .star-range-slider').text())
 
     const javaBeansSlider = wrapper.find('#shop-1 .star-range-slider')
     javaBeansSlider.setValue(4)
@@ -98,6 +97,5 @@ describe('CoffeeShopList. vue', () => {
     cakesCoffeeSlider.setValue(1)
     cakesCoffeeSlider.trigger('input')
     spyUpddateStars.should.have.been.calledWith('2', 1)
-
   })
 })

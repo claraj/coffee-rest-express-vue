@@ -92,9 +92,10 @@ module.exports = {
       .url(browser.globals.devServerURL)
       .waitForElementVisible('#app', 5000)
       .setValue('#new-name', 'Pies')
-      .waitForElementVisible('#add-errors')
-      .assert.containsText('Error, expected `name` to be unique')
-      .assert.elementCount('li', 3) // still 3 coffee shops, no new one 
+      .click('#add-new-button')
+      .waitForElementVisible('#add-errors', 1000)
+      .assert.containsText('#add-errors', 'Error, expected `name` to be unique')
+      .assert.elementCount('li', 3) // still 3 coffee shops, no new one
       .end()
   }
 

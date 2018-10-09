@@ -82,7 +82,6 @@ describe('CoffeeShop', () => {
   })
 
   it('should request a new coffee shop created when addNew message received and update list of shops', () => {
-
     let newShop = {name: 'java beans', stars: 3}
 
     stubAddNew.resolves('whatever')
@@ -91,7 +90,7 @@ describe('CoffeeShop', () => {
     const wrapper = mount(CoffeeShops)
 
     return Vue.nextTick().then(() => {
-      stubFetchAll.resolves([newShop]) //prepare to return new data
+      stubFetchAll.resolves([newShop]) // prepare to return new data
       wrapper.vm.onAddNew(newShop)
       return Vue.nextTick().then(() => {
         stubAddNew.should.have.been.calledWith(newShop)
@@ -102,24 +101,48 @@ describe('CoffeeShop', () => {
     })
   })
 
+  // it('should show an error message if not possible to add new coffee shop', () => {
+  //   let badNewShop = {stars: 3} // no name, not that it matters, because the promise is going to reject
+  //
+  //   stubFetchAll.resolves([])
+  //   stubAddNew.rejects({message: 'Error adding new coffee shop'})
+  //
+  //   const wrapper = mount(CoffeeShops)
+  //
+  //   return Vue.nextTick().then(() => { // wait for stubFetchAll to resolve after mounting
+  //     wrapper.vm.onAddNew(badNewShop) // add new message
+  //     return Vue.nextTick().then(() => { // wait for addNew to resolve
+  //       return Vue.nextTick().then(() => { // wait for addNew to resolve
+  //         console.log(wrapper.text())
+  //         expect(wrapper.find('#add-errors').text()).to.include('Error adding new coffee shop')
+  //       })
+  //     })
+  //   })
+  // }),
+
+
   it('should show an error message if not possible to add new coffee shop', () => {
     let badNewShop = {stars: 3} // no name, not that it matters, because the promise is going to reject
 
     stubFetchAll.resolves([])
-    stubAddNew.rejects('nope')
+    stubAddNew.rejects({message: 'Error adding new coffee shop'})
 
     const wrapper = mount(CoffeeShops)
 
-    return Vue.nextTick().then(() => { // wait for stubFetchAll to resolve after mounting
-      wrapper.vm.onAddNew(badNewShop) // add new message
-      return Vue.nextTick().then(() => { // wait for addNew to resolve
-        return Vue.nextTick().then(() => { // wait for addNew to resolve
-          console.log(wrapper.text())
+    return Vue.nextTick()
+      .then(() => { // wait for stubFetchAll to resolve after mounting
+        wrapper.vm.onAddNew(badNewShop) // add new message
+        return Vue.nextTick()
+      })
+      .then(() => { // wait for addNew to resolve
+        return Vue.nextTick() // wait for addNew to resolve
+      })
+      .then(() => {
+        console.log(wrapper.text())
         expect(wrapper.find('#add-errors').text()).to.include('Error adding new coffee shop')
       })
-    })
-    })
-  })
+  }),
+
 
   it('should request the number of stars are changed when onStarsChanged message received and update list of shops', () => {
     const exampleShops = [
